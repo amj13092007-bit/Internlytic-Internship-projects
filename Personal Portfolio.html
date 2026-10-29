@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azka Maryam | Portfolio</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      line-height: 1.6;
+    }
+
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(15, 23, 42, 0.97);
+      z-index: 1000;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    nav {
+      max-width: 1100px;
+      margin: auto;
+      padding: 18px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: #38bdf8;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #38bdf8;
+    }
+
+    /* Hero Section */
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 130px 20px 60px;
+    }
+
+    .hero-content {
+      max-width: 750px;
+    }
+
+    /* Permanent CSS Hijab Avatar */
+
+    .profile {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 25px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #38bdf8;
+      background: #f3e8ff;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+    }
+
+    .profile svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 span {
+      color: #38bdf8;
+    }
+
+    .hero h2 {
+      color: #94a3b8;
+      margin-bottom: 20px;
+      min-height: 35px;
+    }
+
+    .hero p {
+      color: #cbd5e1;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      margin: 5px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    .secondary {
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      opacity: 0.85;
+    }
+
+    /* General Sections */
+
+    section:not(.hero) {
+      max-width: 1100px;
+      margin: auto;
+      padding: 90px 25px;
+      scroll-margin-top: 65px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 35px;
+      margin-bottom: 45px;
+      color: #38bdf8;
+    }
+
+    /* About */
+
+    .about {
+      text-align: center;
+      max-width: 800px;
+      margin: auto;
+      color: #cbd5e1;
+      font-size: 18px;
+    }
+
+    /* Skills */
+
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .skill {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .skill:hover {
+      transform: translateY(-7px);
+      background: #26364d;
+    }
+
+    .skill h3 {
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    .skill p {
+      color: #cbd5e1;
+    }
+
+    /* Projects */
+
+    .projects-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .project {
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project:hover {
+      transform: translateY(-8px);
+    }
+
+    .project-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      background: #334155;
+    }
+
+    .project-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      align-items: flex-start;
+    }
+
+    .project h3 {
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    .project p {
+      color: #cbd5e1;
+      margin-bottom: 15px;
+      flex-grow: 1;
+    }
+
+    /* Contact */
+
+    .contact-container {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #334155;
+      outline: none;
+      border-radius: 8px;
+      background: #1e293b;
+      color: white;
+      font-size: 16px;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #38bdf8;
+    }
+
+    textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #38bdf8;
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .socials {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .socials a {
+      color: #38bdf8;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .socials a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #020617;
+      color: #94a3b8;
+    }
+
+    /* Mobile Responsive */
+
+    @media (max-width: 700px) {
+      nav {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      nav ul {
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      nav a {
+        font-size: 14px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero h2 {
+        font-size: 20px;
+      }
+
+      .section-title {
+        font-size: 29px;
+      }
+
+      .projects-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+
+  <header>
+    <nav>
+      <div class="logo">MyPortfolio</div>
+
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+
+      <!-- Aesthetic Hijab Avatar: No external image required -->
+
+      <div class="profile">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 160 160"
+          role="img"
+          aria-label="Aesthetic illustration of a woman wearing a hijab"
+        >
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fce7f3"/>
+              <stop offset="100%" stop-color="#c4b5fd"/>
+            </linearGradient>
+
+            <linearGradient id="hijab" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#334155"/>
+              <stop offset="100%" stop-color="#111827"/>
+            </linearGradient>
+
+            <linearGradient id="skin" x1="0" y1="0" x2="0.8" y2="1">
+              <stop offset="0%" stop-color="#f8d3b8"/>
+              <stop offset="100%" stop-color="#dfa98c"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Background -->
+
+          <rect width="160" height="160" fill="url(#bg)"/>
+
+          <!-- Decorative circles -->
+
+          <circle cx="27" cy="35" r="13" fill="#ffffff" opacity="0.45"/>
+          <circle cx="135" cy="50" r="19" fill="#ffffff" opacity="0.35"/>
+          <circle cx="126" cy="125" r="10" fill="#fbcfe8" opacity="0.7"/>
+
+          <!-- Shoulders and outfit -->
+
+          <path
+            d="M27 160 Q31 116 63 111 L98 111 Q132 118 137 160 Z"
+            fill="#64748b"
+          />
+
+          <path
+            d="M59 112 L80 135 L101 112 L112 160 L48 160 Z"
+            fill="#e2e8f0"
+          />
+
+          <!-- Hijab outer shape -->
+
+          <path
+            d="M31 160
+               L29 77
+               Q30 23 80 20
+               Q130 23 131 77
+               L129 160
+               L105 160
+               L110 102
+               Q108 78 80 76
+               Q52 78 50 102
+               L55 160 Z"
+            fill="url(#hijab)"
+          />
+
+          <!-- Face -->
+
+          <path
+            d="M53 66
+               Q53 42 80 40
+               Q107 42 107 66
+               L103 89
+               Q98 111 80 114
+               Q62 111 57 89 Z"
+            fill="url(#skin)"
+          />
+
+          <!-- Hijab framing the face -->
+
+          <path
+            d="M43 63
+               Q40 31 80 28
+               Q120 31 117 63
+               L107 82
+               Q105 55 92 48
+               Q80 42 68 48
+               Q55 55 53 82 Z"
+            fill="url(#hijab)"
+          />
+
+          <!-- Side folds -->
+
+          <path
+            d="M44 68 Q38 111 57 144"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="2"
+            opacity="0.6"
+          />
+
+          <path
+            d="M116 68 Q122 111 103 144"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="2"
+            opacity="0.6"
+          />
+
+          <!-- Eyebrows -->
+
+          <path
+            d="M62 70 Q69 65 75 70"
+            fill="none"
+            stroke="#654438"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M85 70 Q92 65 98 70"
+            fill="none"
+            stroke="#654438"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <!-- Eyes -->
+
+          <path
+            d="M62 77 Q68 82 75 77"
+            fill="none"
+            stroke="#334155"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M85 77 Q92 82 98 77"
+            fill="none"
+            stroke="#334155"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <!-- Nose -->
+
+          <path
+            d="M80 78 L77 88 L82 89"
+            fill="none"
+            stroke="#c28d72"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+
+          <!-- Smile -->
+
+          <path
+            d="M73 97 Q80 102 87 97"
+            fill="none"
+            stroke="#a65e5e"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <!-- Small decorative star -->
+
+          <path
+            d="M128 23 L131 31 L139 34 L131 37 L128 45 L125 37 L117 34 L125 31 Z"
+            fill="#ffffff"
+            opacity="0.9"
+          />
+
+        </svg>
+      </div>
+
+      <h1>Hi, I'm <span>Azka Maryam</span></h1>
+
+      <h2><span id="typing"></span></h2>
+
+      <p>
+        I create modern, responsive and user-friendly websites
+        using HTML, CSS and JavaScript.
+      </p>
+
+      <a href="#projects" class="btn primary">
+        View My Work
+      </a>
+
+      <a href="#contact" class="btn secondary">
+        Contact Me
+      </a>
+
+    </div>
+  </section>
+
+  <!-- About Section -->
+
+  <section id="about">
+    <h2 class="section-title">About Me</h2>
+
+    <div class="about">
+      <p>
+        Hello! I'm Azka Maryam, a passionate web developer who
+        loves creating beautiful and functional websites. I enjoy
+        learning new technologies and turning ideas into
+        real-world projects.
+      </p>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+
+  <section id="skills">
+    <h2 class="section-title">My Skills</h2>
+
+    <div class="skills-container">
+
+      <div class="skill">
+        <h3>HTML</h3>
+        <p>Semantic and structured websites.</p>
+      </div>
+
+      <div class="skill">
+        <h3>CSS</h3>
+        <p>Responsive and modern designs.</p>
+      </div>
+
+      <div class="skill">
+        <h3>JavaScript</h3>
+        <p>Interactive web applications.</p>
+      </div>
+
+      <div class="skill">
+        <h3>Python</h3>
+        <p>Programming and automation.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+
+  <section id="projects">
+    <h2 class="section-title">My Projects</h2>
+
+    <div class="projects-container">
+
+      <!-- Hospital System Project -->
+
+<div class="project">
+
+<img
+class="project-img"
+src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=800&q=80"
+alt="Noor Hospital Management System"
+loading="lazy"
+
+>
+
+  <div class="project-content">
+<h3>Noor Hospital Management System</h3>
+
+<p>
+  Noor Hospital Management System is a user-friendly
+  hospital website designed to provide hospital information,
+  healthcare services, and a convenient experience for visitors.
+</p>
+
+<a
+  href="file:///C:/Users/Acer/Documents/projects.html/Noor%20Hospital.HTML.html"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="btn primary"
+>
+  Visit Hospital Website
+</a>
+
+  </div>
+
+</div>
+
+      <!-- Recipe Finder -->
+
+      <div class="project">
+
+        <img
+          class="project-img"
+          src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80"
+          alt="Recipe Finder Food"
+          loading="lazy"
+        >
+
+        <div class="project-content">
+          <h3>Recipe Finder</h3>
+
+          <p>
+            Discover delicious recipes based on ingredients,
+            food categories or dish names. Find ingredients
+            and step-by-step cooking instructions with ease.
+          </p>
+
+          <a
+href="./recepi website.html.html"
+target="_blank"
+rel="noopener noreferrer"
+class="btn primary"
+
+>
+View Recipe Finder
+
+
+</a>
+
+        </div>
+
+      </div>
+
+      <!-- ShopEase Website Project -->
+
+<div class="project">
+
+<img
+class="project-img"
+src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80"
+alt="ShopEase Online Shopping Website"
+loading="lazy"
+
+>
+
+  <div class="project-content">
+<h3>ShopEase - Online Shopping</h3>
+
+<p>
+  ShopEase is a modern and user-friendly e-commerce website
+  designed to provide a smooth online shopping experience.
+  Users can explore different products, browse shopping
+  categories, and enjoy a clean and responsive interface.
+</p>
+
+<a
+href="./ShopEase.html"
+target="_blank"
+rel="noopener noreferrer"
+class="btn primary"
+
+>
+Visit ShopEase
+
+</a>
+
+
+  </div>
+
+</div>
+
+
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+
+  <section id="contact">
+    <h2 class="section-title">Contact Me</h2>
+
+    <div class="contact-container">
+
+      <form id="contactForm">
+
+        <input
+          type="text"
+          id="name"
+          placeholder="Your Name"
+          required
+        >
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Your Email"
+          required
+        >
+
+        <textarea
+          id="message"
+          placeholder="Your Message"
+          required
+        ></textarea>
+
+        <button type="submit">
+          Send Message
+        </button>
+
+      </form>
+
+      <div class="socials">
+
+        <a href="https://github.com/"
+           target="_blank"
+           rel="noopener noreferrer">
+          GitHub
+        </a>
+
+        <a href="https://www.linkedin.com/"
+           target="_blank"
+           rel="noopener noreferrer">
+          LinkedIn
+        </a>
+
+        <a href="https://www.instagram.com/"
+           target="_blank"
+           rel="noopener noreferrer">
+          Instagram
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+
+  <footer>
+    <p>
+      &copy; 2026 Azka Maryam. All Rights Reserved.
+    </p>
+  </footer>
+
+  <!-- JavaScript -->
+
+  <script>
+    // Typing Animation
+
+    const words = [
+      "Web Developer",
+      "Frontend Developer",
+      "Programmer"
+    ];
+
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+
+    const typing = document.getElementById("typing");
+
+    function typeEffect() {
+      const currentWord = words[wordIndex];
+
+      if (!deleting) {
+        typing.textContent =
+          currentWord.substring(0, charIndex + 1);
+
+        charIndex++;
+
+        if (charIndex === currentWord.length) {
+          deleting = true;
+          setTimeout(typeEffect, 1200);
+          return;
+        }
+
+      } else {
+        typing.textContent =
+          currentWord.substring(0, charIndex - 1);
+
+        charIndex--;
+
+        if (charIndex === 0) {
+          deleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+        }
+      }
+
+      setTimeout(typeEffect, deleting ? 60 : 100);
+    }
+
+    typeEffect();
+
+    // Contact Form Demo
+
+    document
+      .getElementById("contactForm")
+      .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const name =
+          document.getElementById("name").value.trim();
+
+        alert(
+          "Thank you, " + name +
+          "! This is a demo form. Your message has not been sent."
+        );
+
+        this.reset();
+      });
+  </script>
+
+</body>
+</html>

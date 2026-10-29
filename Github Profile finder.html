@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find GitHub profiles and explore public repositories.">
+    <title>GitHub Profile Finder</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg: #0B1020;
+        --card: #17152B;
+        --border: #34304D;
+        --text: #F8FAFC;
+        --muted: #A5A3C2;
+        --green: #8B5CF6;
+        --blue: #38BDF8;
+        --purple-light: #A78BFA;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: radial-gradient(ellipse at top, #1D1740 0%, #0B1020 55%);
+        color: var(--text);
+        min-height: 100vh;
+        padding: 25px 16px 50px;
+    }
+
+    .container {
+        max-width: 950px;
+        margin: auto;
+    }
+
+    header {
+        text-align: center;
+        padding: 35px 10px 28px;
+    }
+
+    .github-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+        filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.5));
+    }
+
+    h1 {
+        font-size: clamp(27px, 5vw, 40px);
+        margin-bottom: 12px;
+        letter-spacing: -1px;
+    }
+
+    h1 span {
+        background: linear-gradient(90deg, #A78BFA, #38BDF8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    header p {
+        color: var(--muted);
+        line-height: 1.7;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 10px;
+        max-width: 650px;
+        margin: 0 auto 25px;
+    }
+
+    .search-box input {
+        flex: 1;
+        min-width: 0;
+        padding: 15px;
+        background: rgba(23, 21, 43, 0.9);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        outline: none;
+        font-size: 16px;
+        transition: 0.3s;
+    }
+
+    .search-box input::placeholder {
+        color: #777493;
+    }
+
+    .search-box input:focus {
+        border-color: var(--purple-light);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    button {
+        border: none;
+        border-radius: 10px;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, #8B5CF6, #6366F1);
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #A78BFA, #818CF8);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 22px rgba(139, 92, 246, 0.35);
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .message {
+        text-align: center;
+        color: var(--muted);
+        padding: 22px 10px;
+        line-height: 1.7;
+    }
+
+    .error {
+        color: #FDA4AF;
+    }
+
+    .profile-card,
+    .repos-section {
+        background: rgba(23, 21, 43, 0.92);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 20px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+        animation: fadeIn 0.4s ease;
+    }
+
+    .profile-top {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        flex-wrap: wrap;
+    }
+
+    .avatar {
+        width: 125px;
+        height: 125px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #8B5CF6;
+        box-shadow: 0 0 22px rgba(139, 92, 246, 0.25);
+    }
+
+    .profile-info {
+        flex: 1;
+        min-width: 180px;
+    }
+
+    .profile-info h2 {
+        font-size: 26px;
+        margin-bottom: 6px;
+        overflow-wrap: anywhere;
+    }
+
+    .username {
+        color: var(--blue);
+        margin-bottom: 12px;
+    }
+
+    .bio {
+        color: #D6D3F0;
+        line-height: 1.7;
+        margin: 12px 0;
+        overflow-wrap: anywhere;
+    }
+
+    .details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        color: var(--muted);
+        margin-top: 14px;
+        font-size: 14px;
+    }
+
+    .details a {
+        overflow-wrap: anywhere;
+    }
+
+    .profile-link {
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        background: #25213D;
+        border: 1px solid #514579;
+        padding: 10px 14px;
+        border-radius: 8px;
+        margin-top: 15px;
+        transition: 0.3s ease;
+    }
+
+    .profile-link:hover,
+    .repo-link:hover {
+        border-color: var(--blue);
+        color: var(--blue);
+        background: #211F3B;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .stat {
+        text-align: center;
+        padding: 18px 8px;
+        background: #101326;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        transition: 0.3s ease;
+    }
+
+    .stat:hover {
+        border-color: #8B5CF6;
+        transform: translateY(-3px);
+    }
+
+    .stat strong {
+        display: block;
+        font-size: 25px;
+        margin-bottom: 8px;
+        color: var(--purple-light);
+    }
+
+    .stat span {
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+        font-size: 21px;
+    }
+
+    .repo-count {
+        color: var(--blue);
+        font-size: 14px;
+    }
+
+    .repo-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .repo {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 17px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(145deg, #1B1933, #141225);
+        transition: transform 0.3s ease, border-color 0.3s ease,
+                    box-shadow 0.3s ease;
+    }
+
+    .repo:hover {
+        transform: translateY(-4px);
+        border-color: #8B5CF6;
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+    }
+
+    .repo h3 {
+        font-size: 17px;
+        overflow-wrap: anywhere;
+        margin-bottom: 10px;
+    }
+
+    .repo h3 a {
+        color: var(--blue);
+        text-decoration: none;
+    }
+
+    .repo h3 a:hover {
+        color: var(--purple-light);
+        text-decoration: underline;
+    }
+
+    .repo p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    .repo-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: auto;
+        margin-bottom: 14px;
+    }
+
+    .repo-link {
+        align-self: flex-start;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 14px;
+        border: 1px solid var(--border);
+        padding: 8px 11px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    footer {
+        text-align: center;
+        color: var(--muted);
+        margin-top: 35px;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    [hidden] {
+        display: none !important;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 12px 12px 35px;
+        }
+
+        header {
+            padding-top: 25px;
+        }
+
+        .search-box {
+            flex-direction: column;
+        }
+
+        .search-box button {
+            width: 100%;
+        }
+
+        .profile-card,
+        .repos-section {
+            padding: 17px;
+        }
+
+        .profile-top {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .profile-info {
+            width: 100%;
+        }
+
+        .details {
+            justify-content: center;
+        }
+
+        .stats {
+            gap: 7px;
+        }
+
+        .stat {
+            padding: 14px 4px;
+        }
+
+        .stat strong {
+            font-size: 21px;
+        }
+
+        .stat span {
+            font-size: 11px;
+        }
+
+        .repo-list {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+    <main class="container">
+    <header>
+        <div class="github-icon" aria-hidden="true">🐙</div>
+        <h1>GitHub <span>Profile Finder</span></h1>
+        <p>
+            Search any GitHub username and explore their profile,
+            followers and public repositories.
+        </p>
+    </header>
+
+    <form class="search-box" id="searchForm">
+        <input
+            type="text"
+            id="usernameInput"
+            placeholder="Enter GitHub username..."
+            aria-label="GitHub username"
+            autocomplete="off"
+            required
+        >
+        <button type="submit" id="searchBtn">Search Profile</button>
+    </form>
+
+    <div
+        id="message"
+        class="message"
+        role="status"
+        aria-live="polite"
+    >
+        Enter a GitHub username to get started.
+    </div>
+
+    <section id="profileCard" class="profile-card" hidden>
+        <div class="profile-top">
+            <img id="avatar" class="avatar" alt="GitHub profile avatar">
+
+            <div class="profile-info">
+                <h2 id="displayName"></h2>
+                <div id="username" class="username"></div>
+                <p id="bio" class="bio" hidden></p>
+                <div id="details" class="details"></div>
+
+                <a
+                    id="profileLink"
+                    class="profile-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    View GitHub Profile ↗
+                </a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <strong id="repoCount">0</strong>
+                <span>Repositories</span>
+            </div>
+
+            <div class="stat">
+                <strong id="followers">0</strong>
+                <span>Followers</span>
+            </div>
+
+            <div class="stat">
+                <strong id="following">0</strong>
+                <span>Following</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="reposSection" class="repos-section" hidden>
+        <div class="section-heading">
+            <h2>Public Repositories</h2>
+            <span id="repoTotal" class="repo-count"></span>
+        </div>
+
+        <div id="repoList" class="repo-list"></div>
+    </section>
+
+</main>
+
+<script>
+    const searchForm = document.getElementById("searchForm");
+    const usernameInput = document.getElementById("usernameInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const message = document.getElementById("message");
+
+    const profileCard = document.getElementById("profileCard");
+    const reposSection = document.getElementById("reposSection");
+    const repoList = document.getElementById("repoList");
+
+    let searchNumber = 0;
+
+    function showMessage(text, isError = false) {
+        message.textContent = text;
+        message.className = isError
+            ? "message error"
+            : "message";
+        message.hidden = false;
+    }
+
+    function formatNumber(number) {
+        return new Intl.NumberFormat("en-US").format(number);
+    }
+
+    function addDetail(label, value) {
+        if (value === null || value === undefined || value === "") {
+            return null;
+        }
+
+        const item = document.createElement("span");
+        item.textContent = label + ": " + value;
+        return item;
+    }
+
+    async function fetchGitHubData(url, requestNumber) {
+        const response = await fetch(url, {
+            headers: {
+                "Accept": "application/vnd.github+json"
+            }
+        });
+
+        if (requestNumber !== searchNumber) {
+            throw new Error("Search cancelled");
+        }
+
+        if (response.status === 404) {
+            throw new Error("NOT_FOUND");
+        }
+
+        if (response.status === 403 || response.status === 429) {
+            throw new Error("RATE_LIMIT");
+        }
+
+        if (!response.ok) {
+            throw new Error("API_ERROR");
+        }
+
+        return response.json();
+    }
+
+    function displayProfile(user) {
+        const avatar = document.getElementById("avatar");
+
+        avatar.src = user.avatar_url;
+        avatar.alt = user.login + "'s profile avatar";
+
+        document.getElementById("displayName").textContent =
+            user.name || user.login;
+
+        document.getElementById("username").textContent =
+            "@" + user.login;
+
+        const bio = document.getElementById("bio");
+
+        if (user.bio) {
+            bio.textContent = user.bio;
+            bio.hidden = false;
+        } else {
+            bio.hidden = true;
+        }
+
+        const details = document.getElementById("details");
+        details.replaceChildren();
+
+        const location = addDetail("Location", user.location);
+        const company = addDetail("Company", user.company);
+        const joined = addDetail(
+            "Joined",
+            user.created_at
+                ? new Date(user.created_at).toLocaleDateString()
+                : null
+        );
+
+        if (location) details.appendChild(location);
+        if (company) details.appendChild(company);
+
+        if (user.blog && user.blog.trim()) {
+            const blogItem = addDetail("Blog", user.blog.trim());
+            const rawBlog = user.blog.trim();
+            let blogUrl;
+
+            try {
+                blogUrl = new URL(
+                    /^https?:\/\//i.test(rawBlog)
+                        ? rawBlog
+                        : "https://" + rawBlog
+                );
+            } catch {
+                blogUrl = null;
+            }
+
+            if (
+                blogUrl &&
+                (blogUrl.protocol === "https:" ||
+                 blogUrl.protocol === "http:") &&
+                blogUrl.hostname.includes(".")
+            ) {
+                const link = document.createElement("a");
+                link.href = blogUrl.href;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.textContent = blogItem.textContent;
+                link.style.color = "#38BDF8";
+                details.appendChild(link);
+            } else if (blogItem) {
+                details.appendChild(blogItem);
+            }
+        }
+
+        if (joined) details.appendChild(joined);
+
+        document.getElementById("repoCount").textContent =
+            formatNumber(user.public_repos);
+
+        document.getElementById("followers").textContent =
+            formatNumber(user.followers);
+
+        document.getElementById("following").textContent =
+            formatNumber(user.following);
+
+        const profileLink = document.getElementById("profileLink");
+        profileLink.href = user.html_url;
+
+        profileCard.hidden = false;
+    }
+
+    function displayRepositories(repositories) {
+        repoList.replaceChildren();
+
+        document.getElementById("repoTotal").textContent =
+            repositories.length + " shown";
+
+        if (repositories.length === 0) {
+            const empty = document.createElement("p");
+            empty.className = "message";
+            empty.textContent =
+                "This user has no public repositories to display.";
+            repoList.appendChild(empty);
+            return;
+        }
+
+        repositories.forEach(repo => {
+            const card = document.createElement("article");
+            card.className = "repo";
+
+            const title = document.createElement("h3");
+            const titleLink = document.createElement("a");
+
+            titleLink.textContent = repo.name;
+            titleLink.href = repo.html_url;
+            titleLink.target = "_blank";
+            titleLink.rel = "noopener noreferrer";
+
+            title.appendChild(titleLink);
+
+            const description = document.createElement("p");
+            description.textContent =
+                repo.description || "No description provided.";
+
+            const meta = document.createElement("div");
+            meta.className = "repo-meta";
+
+            if (repo.language) {
+                const language = document.createElement("span");
+                language.textContent = "● " + repo.language;
+                meta.appendChild(language);
+            }
+
+            const stars = document.createElement("span");
+            stars.textContent =
+                "★ " + formatNumber(repo.stargazers_count);
+            meta.appendChild(stars);
+
+            const forks = document.createElement("span");
+            forks.textContent =
+                "⑂ " + formatNumber(repo.forks_count);
+            meta.appendChild(forks);
+
+            const link = document.createElement("a");
+            link.className = "repo-link";
+            link.href = repo.html_url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "View Repository ↗";
+
+            card.append(title, description, meta, link);
+            repoList.appendChild(card);
+        });
+    }
+
+    async function searchProfile(username) {
+        const currentSearch = ++searchNumber;
+
+        profileCard.hidden = true;
+        reposSection.hidden = true;
+        repoList.replaceChildren();
+
+        searchBtn.disabled = true;
+        searchBtn.textContent = "Searching...";
+
+        showMessage("Loading GitHub profile...");
+
+        try {
+            const encodedUsername = encodeURIComponent(username);
+
+            const user = await fetchGitHubData(
+                "https://api.github.com/users/" + encodedUsername,
+                currentSearch
+            );
+
+            if (currentSearch !== searchNumber) return;
+
+            const repositories = await fetchGitHubData(
+                "https://api.github.com/users/" +
+                encodedUsername +
+                "/repos?sort=updated&per_page=100",
+                currentSearch
+            );
+
+            if (currentSearch !== searchNumber) return;
+
+            displayProfile(user);
+            displayRepositories(repositories);
+
+            reposSection.hidden = false;
+            message.hidden = true;
+
+        } catch (error) {
+            if (currentSearch !== searchNumber) return;
+
+            profileCard.hidden = true;
+            reposSection.hidden = true;
+
+            if (error.message === "NOT_FOUND") {
+                showMessage(
+                    "User not found. Please check the username and try again.",
+                    true
+                );
+            } else if (error.message === "RATE_LIMIT") {
+                showMessage(
+                    "GitHub API rate limit reached. Please wait a while and try again.",
+                    true
+                );
+            } else if (error.message === "API_ERROR") {
+                showMessage(
+                    "GitHub API error. Please try again later.",
+                    true
+                );
+            } else {
+                showMessage(
+                    "Network error. Check your internet connection and try again.",
+                    true
+                );
+            }
+
+            console.error("GitHub Profile Finder error:", error);
+
+        } finally {
+            if (currentSearch === searchNumber) {
+                searchBtn.disabled = false;
+                searchBtn.textContent = "Search Profile";
+            }
+        }
+    }
+
+    searchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const username = usernameInput.value.trim();
+
+        if (!username) {
+            showMessage(
+                "Please enter a GitHub username.",
+                true
+            );
+            usernameInput.focus();
+            return;
+        }
+
+        searchProfile(username);
+    });
+</script>
+
+</body>
+</html>
